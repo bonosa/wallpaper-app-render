@@ -1,0 +1,14 @@
+myvenv/
+*.jpg
+node_modules/
+cors-proxy/node_modules/
+source/
+*.png
+__pycache__/
+.gcloudignore/
+*.log
+*.env
+.env
+*.pyc
+*.md
+myenv

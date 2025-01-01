@@ -1,0 +1,118 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+.app-container {
+    margin-top: 50px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+select, button {
+    font-size: 16px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#wallpaper-container {
+    margin-top: 30px;
+}
+
+.wallpaper-item {
+    margin: 20px;
+    display: inline-block;
+}
+
+.wallpaper-image {
+    max-width: 80%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.download-button {
+    margin-top: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.download-button:hover {
+    background-color: #218838;
+}
+
+.set-wallpaper-button {
+    margin-top: 10px;
+    background-color: #ffc107;
+    color: black;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.set-wallpaper-button:hover {
+    background-color: #e0a800;
+}
+
+.spinner {
+    font-size: 18px;
+    color: #007BFF;
+    margin-top: 20px;
+}
+
+.set-wallpaper-button {
+    margin-top: 10px;
+    background-color: #ffc107;
+    color: black;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.set-wallpaper-button:hover {
+    background-color: #e0a800;
+}
+
+.instructions {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.instructions ol {
+    margin: 10px 0 0 20px;
+}
+
+.wallpaper-image {
+    max-width: 150px; /* Thumbnail size */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+/* End of styles.css */

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallpaper App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <h1>✨ Wallpaper App ✨</h1>
+        <p>Select a category to fetch wallpapers:</p>
+
+        <select id="category-select">
+            <option value="Forests">Forests</option>
+            <option value="Cityscapes">Cityscapes</option>
+            <option value="Water">Water</option>
+            <option value="Sunsets">Sunsets</option>
+        </select>
+        <button id="fetch-button">Fetch Wallpapers</button>
+
+        <div id="wallpaper-container"></div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
