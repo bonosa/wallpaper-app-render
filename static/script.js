@@ -8,8 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         wallpaperContainer.innerHTML = "<div class='spinner'>Loading...</div>";
 
-        // Fetch wallpapers from Flask backend
-        fetch("/fetch-wallpapers", {
+        // Backend URL: Change to your deployed URL when necessary
+        const backendUrl = "/fetch-wallpapers"; // Local testing
+        // const backendUrl = "https://your-deployed-flask-app-url.onrender.com/fetch-wallpapers"; // Uncomment for deployment
+
+        fetch(backendUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ category: selectedCategory }),
@@ -35,15 +38,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     setWallpaperButton.addEventListener("click", async () => {
                         try {
-                            const result = await window.api.setWallpaper(wallpaper); // Use the API exposed by preload.js
+                            const response = await fetch("/set-wallpaper", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ imageUrl: wallpaper }),
+                            });
+                            const result = await response.json();
                             if (result.success) {
-                                alert("Wallpaper set successfully!");
+                                alert(result.message);
                             } else {
                                 alert(`Failed to set wallpaper: ${result.error}`);
                             }
                         } catch (error) {
                             alert(`Error setting wallpaper: ${error.message}`);
                         }
+                        
                     });
 
                     const wallpaperItem = document.createElement("div");

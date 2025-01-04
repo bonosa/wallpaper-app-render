@@ -1,29 +1,15 @@
 from flask import Flask, request, jsonify, render_template
 import requests
-import secrets
+import os
+import win32api
+import win32con
+import win32gui
 
-app = Flask(__name__)
-app.secret_key = secrets.token_hex(16)  # Replace with your own secret key
+# import modules
+#from py-wallpaper import set_wallpaper, get_wallpaper,change_wallpaper
+  # Importing py-wallpaper
 
-# Wikimedia Commons API Endpoint
-WIKIMEDIA_API_URL = "https://commons.wikimedia.org/w/api.php"
-
-# Fetch Images from Wikimedia Commons
-def fetch_wikimedia_images(category):
-    params = {
-        "action": "query",
-        "format": "json",
-        "list": "search",
-        "srsearch": category,
-        "srnamespace": "6",  # Search only in the file namespace
-        "srlimit": 10,  # Number of images to fetch
-    }
-    response = requests.get(WIKIMEDIA_API_URL, params=params)
-    data = response.json()
-    print("Wikimedia API Response:", data)  # Debugging
-    if data and data.get("query", {}).get("search"):
-        return [item["title"] for item in data["query"]["search"]]
-    return []
+app = Flask(__name__, static_folder='static', template_folder='templates')
 
 @app.route("/")
 def index():
@@ -32,16 +18,44 @@ def index():
 @app.route("/fetch-wallpapers", methods=["POST"])
 def fetch_wallpapers():
     category = request.json.get("category")
-    image_titles = fetch_wikimedia_images(category)
-    image_urls = []
+    proxy_url = "http://localhost:5000/proxy"  # Node.js proxy server
+    params = {
+        "action": "query",
+        "format": "json",
+        "list": "search",
+        "srsearch": category,
+        "srnamespace": "6",
+        "srlimit": 10,
+    }
+    try:
+        response = requests.get(proxy_url, params=params)
+        response.raise_for_status()
+        wallpapers = [
+            f"https://commons.wikimedia.org/wiki/Special:FilePath/{item['title'].replace(' ', '_')}"
+            for item in response.json().get("query", {}).get("search", [])
+        ]
+        return jsonify({"wallpapers": wallpapers})
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching wallpapers: {e}")
+        return jsonify({"error": "Failed to fetch wallpapers"}), 500
 
-    for title in image_titles:
-        # Construct the image URL
-        image_url = f"https://commons.wikimedia.org/wiki/Special:FilePath/{title.replace(' ', '_')}"
-        image_urls.append(image_url)
+@app.route("/set-wallpaper", methods=["POST"])
+def set_wallpaper():
+    image_url = request.json.get("imageUrl")
+    try:
+        # Download the image to a temporary file
+        local_image_path = os.path.join(os.getcwd(), "temp_wallpaper.jpg")
+        response = requests.get(image_url)
+        with open(local_image_path, "wb") as f:
+            f.write(response.content)
+        # Set the wallpaper
+        win32gui.SystemParametersInfo(win32con.SPI_SETDESKWALLPAPER, local_image_path, win32con.SPIF_SENDCHANGE)
 
-    print("Fetched Image URLs:", image_urls)  # Debugging
-    return jsonify({"wallpapers": image_urls})
+
+        return jsonify({"success": True, "message": "Wallpaper set successfully"})
+    except Exception as e:
+        print(f"Error setting wallpaper: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8000)
